@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   email: localStorage.getItem("email") || null,
   userId: localStorage.getItem("userId") || null,
+  userDetails: null,
 };
 
 export const authSlice = createSlice({
@@ -21,10 +22,14 @@ export const authSlice = createSlice({
       localStorage.removeItem("email");
       localStorage.removeItem("userId");
     },
+    getUserDetailsReducer: (state, action) => {
+      state.userDetails = action.payload.userDetails;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { loginReducer, logoutReducer } = authSlice.actions;
+export const { loginReducer, logoutReducer, getUserDetailsReducer } =
+  authSlice.actions;
 
 export default authSlice.reducer;

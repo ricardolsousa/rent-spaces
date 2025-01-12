@@ -4,7 +4,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth, db } from "../../firebase/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 // LOGIN with email and password
 export const login = async (email: string, password: string) => {
@@ -61,5 +61,23 @@ export const logout = async () => {
     await signOut(auth);
   } catch (e) {
     throw e;
+  }
+};
+
+// GET user details by id
+export const getUserById = async (userId: string) => {
+  try {
+    const userRef = doc(db, `/users/${userId}`);
+
+    const userSnapshot = await getDoc(userRef);
+
+    if (userSnapshot.exists()) {
+      return userSnapshot.data();
+    } else {
+      throw new Error("User not found");
+    }
+  } catch (e) {
+    console.error(e);
+    throw new Error("Error trying to get user by id");
   }
 };

@@ -1,16 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AuthenticationStateProps } from "./types/authentication/AuthenticationTypes";
 import Navbar from "./components/navbar/Navbar";
 import RegisterPage from "./pages/authentication/register/RegisterPage";
 import LoginPage from "./pages/authentication/login/LoginPage";
+import { getUserById } from "./services/authentication/AuthenticationService";
+import { getUserDetailsReducer } from "./store/auth/authSlice";
 
 function App() {
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector(
     (state: AuthenticationStateProps) => state.auth.userId
   );
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (isAuthenticated) {
+        try {
+          const user = await getUserById(isAuthenticated);
+          if (user) {
+            dispatch(getUserDetailsReducer({ userDetails: user }));
+          }
+        } catch (e) {
+          console.error(e);
+          throw new Error("Error when trying to get user");
+        }
+      }
+    };
+    fetchUser();
+  }, [isAuthenticated, dispatch]);
 
   return (
     <div>
