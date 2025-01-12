@@ -3,7 +3,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { auth } from "../../firebase/firebase";
+import { auth, db } from "../../firebase/firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 // LOGIN with email and password
 export const login = async (email: string, password: string) => {
@@ -27,6 +28,7 @@ export const login = async (email: string, password: string) => {
 // REGISTER with email and password
 export const register = async (email: string, password: string) => {
   try {
+    // Register user with email/password
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -34,6 +36,11 @@ export const register = async (email: string, password: string) => {
     );
 
     if (userCredential.user) {
+      // Add to users collection
+      await setDoc(doc(db, "users", userCredential.user.uid), {
+        email,
+      });
+
       return userCredential.user;
     }
 
