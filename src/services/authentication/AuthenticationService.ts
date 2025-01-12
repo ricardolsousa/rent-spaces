@@ -26,7 +26,11 @@ export const login = async (email: string, password: string) => {
 };
 
 // REGISTER with email and password
-export const register = async (email: string, password: string) => {
+export const register = async (
+  email: string,
+  password: string,
+  userType: "owner" | "renter"
+) => {
   try {
     // Register user with email/password
     const userCredential = await createUserWithEmailAndPassword(
@@ -39,6 +43,7 @@ export const register = async (email: string, password: string) => {
       // Add to users collection
       await setDoc(doc(db, "users", userCredential.user.uid), {
         email,
+        userType,
       });
 
       return userCredential.user;

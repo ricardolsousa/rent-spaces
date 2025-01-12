@@ -3,16 +3,29 @@ import { register } from "../../../services/authentication/AuthenticationService
 import { loginReducer } from "../../../store/auth/authSlice";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import SelectionInput from "../../utils/selection-input/SelectionInput";
+
+const userTypeList = [
+  {
+    label: "Owner",
+    value: "owner",
+  },
+  {
+    label: "Renter",
+    value: "renter",
+  },
+];
 
 const RegisterForm = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [userType, setUserType] = useState<"owner" | "renter">("owner");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleRegister = async () => {
     try {
-      const user = await register(email, password);
+      const user = await register(email, password, userType);
 
       if (user) {
         dispatch(
@@ -53,6 +66,12 @@ const RegisterForm = () => {
           id="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+        />
+        <SelectionInput
+          label="Type"
+          value={userType}
+          setValue={(option: "owner" | "renter") => setUserType(option)}
+          options={userTypeList}
         />
       </div>
       <div className="flex justify-center mt-4">
