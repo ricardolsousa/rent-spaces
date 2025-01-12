@@ -19,6 +19,7 @@ export const authSlice = createSlice({
     logoutReducer: (state) => {
       state.email = null;
       state.userId = null;
+      state.userDetails = null;
       localStorage.removeItem("email");
       localStorage.removeItem("userId");
     },
