@@ -8,6 +8,7 @@ import RegisterPage from "./pages/authentication/register/RegisterPage";
 import LoginPage from "./pages/authentication/login/LoginPage";
 import { getUserById } from "./services/authentication/AuthenticationService";
 import { getUserDetailsReducer } from "./store/auth/authSlice";
+import SpacesPage from "./pages/spaces/SpacesPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -37,19 +38,23 @@ function App() {
       <Router>
         <Navbar />
         <div className="py-16">
-          {isAuthenticated && (
-            <Routes>
-              <Route path="/" element={<div>Homepage</div>} />
-            </Routes>
-          )}
-          {!isAuthenticated && (
-            <Routes>
-              {/* Auth routes */}
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="*" element={<Navigate to="/login" replace />} />
-            </Routes>
-          )}
+          <Routes>
+            {isAuthenticated && (
+              <>
+                <Route path="/" element={<div>Homepage</div>} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </>
+            )}
+            {!isAuthenticated && (
+              <>
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="*" element={<Navigate to="/login" replace />} />
+              </>
+            )}
+            {/* Route accessible to anyone */}
+            <Route path="/spaces" element={<SpacesPage />} />
+          </Routes>
         </div>
       </Router>
     </div>
