@@ -1,17 +1,9 @@
-import SpaceCard from "../../components/spaces/space-card/SpaceCard";
+import SpaceList from "../../components/spaces/space-list/SpaceList";
 
 const SpacesPage = () => {
   return (
     <div className="py-4 px-48">
-      <div className="grid grid-cols-4 gap-4">
-        <SpaceCard space={null} />
-        <SpaceCard space={null} />
-        <SpaceCard space={null} />
-        <SpaceCard space={null} />
-        <SpaceCard space={null} />
-        <SpaceCard space={null} />
-        <SpaceCard space={null} />
-      </div>
+      <SpaceList />
     </div>
   );
 };
