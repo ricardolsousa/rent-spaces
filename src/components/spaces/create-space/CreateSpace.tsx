@@ -9,7 +9,7 @@ const CreateSpace = () => {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex w-content justify-center rounded-md bg-blue-600 py-2 px-3 text-sm font-semibold text-white shadow-sm"
+        className="inline-flex w-content justify-center rounded-md bg-blue-900 py-2 px-3 text-sm font-semibold text-white shadow-sm"
       >
         Add space
       </button>

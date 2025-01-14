@@ -39,7 +39,7 @@ const Navbar = () => {
         <button
           type="button"
           onClick={handleLogout}
-          className="inline-flex w-full justify-center rounded-md bg-blue-600 py-2 px-3 text-sm font-semibold text-white shadow-sm mr-3 sm:w-auto"
+          className="inline-flex w-full justify-center rounded-md bg-blue-900 py-2 px-3 text-sm font-semibold text-white shadow-sm mr-3 sm:w-auto"
         >
           Logout
         </button>
@@ -47,7 +47,7 @@ const Navbar = () => {
         <button
           type="button"
           onClick={handleLogin}
-          className="inline-flex w-full justify-center rounded-md bg-blue-600 py-2 px-3 text-sm font-semibold text-white shadow-sm mr-3 sm:w-auto"
+          className="inline-flex w-full justify-center rounded-md bg-blue-900 py-2 px-3 text-sm font-semibold text-white shadow-sm mr-3 sm:w-auto"
         >
           Login
         </button>
