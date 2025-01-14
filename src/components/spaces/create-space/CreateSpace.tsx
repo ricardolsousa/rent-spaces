@@ -13,7 +13,7 @@ const CreateSpace = () => {
       >
         Add space
       </button>
-      {open && <CreateSpaceDialog />}
+      {open && <CreateSpaceDialog open={open} setOpen={setOpen} />}
     </>
   );
 };
