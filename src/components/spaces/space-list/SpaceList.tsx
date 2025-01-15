@@ -2,17 +2,21 @@ import { useEffect, useState } from "react";
 import SpaceCard from "../space-card/SpaceCard";
 import { useSpaceContext } from "../context/SpaceContext";
 import { getSpaces } from "../../../services/space/SpaceService";
+import { useSelector } from "react-redux";
+import { AuthenticationStateProps } from "../../../types/authentication/AuthenticationTypes";
 
 const SpaceList = () => {
+  const loggedUser = useSelector(
+    (state: AuthenticationStateProps) => state.auth.userId
+  );
   const { spaces, setSpaces } = useSpaceContext();
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const handleGetSpaces = async () => {
-      console.log("entrei");
       setLoading(true);
       try {
-        const spaces = await getSpaces();
+        const spaces = await getSpaces(loggedUser);
 
         if (spaces.length) {
           setSpaces((prevSpaces) => [...prevSpaces, ...spaces]);
@@ -25,7 +29,7 @@ const SpaceList = () => {
     };
 
     handleGetSpaces();
-  }, [setSpaces]);
+  }, [setSpaces, loggedUser]);
 
   if (loading) {
     return <div>Loading...</div>;

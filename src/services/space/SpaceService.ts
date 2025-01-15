@@ -1,8 +1,19 @@
-import { addDoc, collection, getDoc, getDocs, query } from "firebase/firestore";
+import {
+  addDoc,
+  arrayRemove,
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../../firebase/firebase";
+import { getUserById } from "../authentication/AuthenticationService";
 
 // GET spaces
-export const getSpaces = async () => {
+export const getSpaces = async (userId?: string) => {
   try {
     const spacesRef = collection(db, "spaces");
 
@@ -10,9 +21,17 @@ export const getSpaces = async () => {
 
     const spacesSnapshot = await getDocs(spacesQuery);
 
+    let favoriteSpaceIds: string[] = [];
+    if (userId) {
+      const user = await getUserById(userId);
+
+      favoriteSpaceIds = user.favoriteSpaces || [];
+    }
+
     const spaces = spacesSnapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
+      isFavorite: favoriteSpaceIds?.find((id: string) => id === doc.id),
     }));
 
     return spaces;
@@ -46,5 +65,36 @@ export const createSpace = async (space: any) => {
   } catch (e) {
     console.error(e);
     throw new Error("Error trying to create space");
+  }
+};
+
+// ADD space to favorite
+export const addSpaceToFavorites = async (spaceId: string, userId: string) => {
+  try {
+    const userRef = doc(db, "users", userId);
+
+    await updateDoc(userRef, {
+      favoriteSpaces: arrayUnion(spaceId),
+    });
+  } catch (e) {
+    console.error(e);
+    throw new Error("Error trying to add space to favorite");
+  }
+};
+
+// REMOVE space to favorite
+export const removeSpaceFromFavorites = async (
+  spaceId: string,
+  userId: string
+) => {
+  try {
+    const userRef = doc(db, "users", userId);
+
+    await updateDoc(userRef, {
+      favoriteSpaces: arrayRemove(spaceId),
+    });
+  } catch (e) {
+    console.error(e);
+    throw new Error("Error trying to remove space to favorite");
   }
 };

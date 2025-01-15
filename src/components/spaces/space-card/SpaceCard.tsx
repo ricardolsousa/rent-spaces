@@ -1,3 +1,4 @@
+import { useState } from "react";
 import SpaceFavorite from "../space-favorite/SpaceFavorite";
 
 type SpaceCardProps = {
@@ -5,9 +6,17 @@ type SpaceCardProps = {
 };
 
 const SpaceCard = ({ space }: SpaceCardProps) => {
+  const [isFavorite, setIsFavorite] = useState<boolean>(
+    space?.isFavorite || false
+  );
+
   return (
     <div className="relative rounded bg-white h-72 w-full flex flex-col">
-      <SpaceFavorite />
+      <SpaceFavorite
+        spaceId={space.id}
+        isFavorite={isFavorite}
+        setIsFavorite={setIsFavorite}
+      />
       <img
         src="images/spaces.webp"
         alt=""
