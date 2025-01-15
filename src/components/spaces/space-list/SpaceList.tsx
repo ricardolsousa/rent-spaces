@@ -6,8 +6,8 @@ import { useSelector } from "react-redux";
 import { AuthenticationStateProps } from "../../../types/authentication/AuthenticationTypes";
 
 const SpaceList = () => {
-  const loggedUser = useSelector(
-    (state: AuthenticationStateProps) => state.auth.userId
+  const loggedUserDetails = useSelector(
+    (state: AuthenticationStateProps) => state.auth.userDetails
   );
   const { spaces, setSpaces } = useSpaceContext();
   const [loading, setLoading] = useState<boolean>(false);
@@ -16,7 +16,7 @@ const SpaceList = () => {
     const handleGetSpaces = async () => {
       setLoading(true);
       try {
-        const spaces = await getSpaces(loggedUser);
+        const spaces = await getSpaces(loggedUserDetails.favoriteSpaces);
 
         if (spaces.length) {
           setSpaces((prevSpaces) => [...prevSpaces, ...spaces]);
@@ -29,7 +29,7 @@ const SpaceList = () => {
     };
 
     handleGetSpaces();
-  }, [setSpaces, loggedUser]);
+  }, [setSpaces, loggedUserDetails]);
 
   if (loading) {
     return <div>Loading...</div>;

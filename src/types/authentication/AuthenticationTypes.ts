@@ -4,5 +4,5 @@ export type AuthenticationStateProps = {
 
 type UserProps = {
   userId: string;
-  email: string;
+  userDetails?: any;
 };

@@ -8,12 +8,12 @@ import {
   getDocs,
   query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
-import { getUserById } from "../authentication/AuthenticationService";
 
 // GET spaces
-export const getSpaces = async (userId?: string) => {
+export const getSpaces = async (userFavorites?: string[]) => {
   try {
     const spacesRef = collection(db, "spaces");
 
@@ -21,17 +21,10 @@ export const getSpaces = async (userId?: string) => {
 
     const spacesSnapshot = await getDocs(spacesQuery);
 
-    let favoriteSpaceIds: string[] = [];
-    if (userId) {
-      const user = await getUserById(userId);
-
-      favoriteSpaceIds = user.favoriteSpaces || [];
-    }
-
     const spaces = spacesSnapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
-      isFavorite: favoriteSpaceIds?.find((id: string) => id === doc.id),
+      isFavorite: userFavorites?.find((id: string) => id === doc.id),
     }));
 
     return spaces;
@@ -65,6 +58,31 @@ export const createSpace = async (space: any) => {
   } catch (e) {
     console.error(e);
     throw new Error("Error trying to create space");
+  }
+};
+
+// GET favorite spaces
+export const getFavoriteSpaces = async (userFavorites: string[]) => {
+  try {
+    const spacesRef = collection(db, "spaces");
+
+    const spacesQuery = query(
+      spacesRef,
+      where("__name__", "in", userFavorites)
+    );
+
+    const spacesSnapshot = await getDocs(spacesQuery);
+
+    const spaces = spacesSnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+      isFavorite: true,
+    }));
+
+    return spaces;
+  } catch (e) {
+    console.error(e);
+    throw new Error("Error trying to get spaces");
   }
 };
 
