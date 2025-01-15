@@ -1,10 +1,13 @@
+import SpaceFavorite from "../space-favorite/SpaceFavorite";
+
 type SpaceCardProps = {
   space: any;
 };
 
 const SpaceCard = ({ space }: SpaceCardProps) => {
   return (
-    <div className="rounded bg-white h-72 w-full flex flex-col">
+    <div className="relative rounded bg-white h-72 w-full flex flex-col">
+      <SpaceFavorite />
       <img
         src="images/spaces.webp"
         alt=""
