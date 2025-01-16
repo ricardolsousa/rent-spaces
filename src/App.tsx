@@ -10,6 +10,7 @@ import { getUserById } from "./services/authentication/AuthenticationService";
 import { getUserDetailsReducer } from "./store/auth/authSlice";
 import SpacesPage from "./pages/spaces/SpacesPage";
 import MyFavoriteSpacesPage from "./pages/my-favorite-spaces/MyFavoriteSpacesPage";
+import MySpacesPage from "./pages/my-spaces/MySpacesPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ function App() {
             {isAuthenticated && (
               <>
                 <Route path="/" element={<div>Homepage</div>} />
+                <Route path="/my-spaces" element={<MySpacesPage />} />
                 <Route
                   path="/my-favorite-spaces"
                   element={<MyFavoriteSpacesPage />}
