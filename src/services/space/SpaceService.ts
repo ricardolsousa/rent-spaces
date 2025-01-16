@@ -61,6 +61,27 @@ export const createSpace = async (space: any) => {
   }
 };
 
+// GET my spaces
+export const getMySpaces = async (userId: string) => {
+  try {
+    const spacesRef = collection(db, "spaces");
+
+    const spacesQuery = query(spacesRef, where("ownerId", "==", userId));
+
+    const spacesSnapshot = await getDocs(spacesQuery);
+
+    const spaces = spacesSnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+
+    return spaces;
+  } catch (e) {
+    console.error(e);
+    throw new Error("Error trying to get spaces");
+  }
+};
+
 // GET favorite spaces
 export const getFavoriteSpaces = async (userFavorites: string[]) => {
   try {
