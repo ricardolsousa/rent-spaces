@@ -1,4 +1,4 @@
-import MySpaceList from "../../components/spaces/my-space-list.tsx/MySpaceList";
+import MySpaceList from "../../components/spaces/my-space-list/MySpaceList";
 
 const MySpacesPage = () => {
   return (
