@@ -1,35 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import SpaceCard from "../space-card/SpaceCard";
 import { useSpaceContext } from "../context/SpaceContext";
-import { getSpaces } from "../../../services/space/SpaceService";
 import { useSelector } from "react-redux";
 import { AuthenticationStateProps } from "../../../types/authentication/AuthenticationTypes";
+import { useSpaces } from "../hooks/useSpaces";
 
 const SpaceList = () => {
-  const loggedUserDetails = useSelector(
-    (state: AuthenticationStateProps) => state.auth.userDetails
+  const loggedUser = useSelector(
+    (state: AuthenticationStateProps) => state.auth.userId
   );
-  const { spaces, setSpaces } = useSpaceContext();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { spaces: contextSpaces, setSpaces: setContextSpaces } =
+    useSpaceContext();
 
+  const { spaces, loading } = useSpaces({
+    userId: loggedUser,
+    pageType: "all",
+  });
+
+  // Atualiza o contexto sempre que os espaços mudarem
   useEffect(() => {
-    const handleGetSpaces = async () => {
-      setLoading(true);
-      try {
-        const spaces = await getSpaces(loggedUserDetails.favoriteSpaces);
-
-        if (spaces.length) {
-          setSpaces((prevSpaces) => [...prevSpaces, ...spaces]);
-        }
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    handleGetSpaces();
-  }, [setSpaces, loggedUserDetails]);
+    if (spaces) {
+      setContextSpaces(spaces);
+    }
+  }, [spaces, setContextSpaces]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -37,9 +30,9 @@ const SpaceList = () => {
 
   return (
     <>
-      {spaces.length ? (
+      {contextSpaces.length ? (
         <div className="grid grid-cols-4 gap-4">
-          {spaces.map((space) => (
+          {contextSpaces.map((space) => (
             <SpaceCard space={space} />
           ))}
         </div>

@@ -26,10 +26,6 @@ const Navbar = () => {
     }
   };
 
-  const handleLogin = () => {
-    navigate("/");
-  };
-
   return (
     <div className="h-16 flex fixed w-full z-10 items-center justify-between px-12 py-2 bg-gray-600">
       <Link to={"/spaces"}>
@@ -60,13 +56,20 @@ const Navbar = () => {
           </button>
         </div>
       ) : (
-        <button
-          type="button"
-          onClick={handleLogin}
-          className="inline-flex w-fit justify-center rounded-md bg-blue-900 py-2 px-3 text-sm font-semibold text-white shadow-sm"
-        >
-          Login
-        </button>
+        <div className="flex gap-2">
+          <Link
+            to={"/register"}
+            className="inline-flex w-fit justify-center rounded-md bg-blue-900 py-2 px-3 text-sm font-semibold text-white shadow-sm"
+          >
+            Register
+          </Link>
+          <Link
+            to={"/login"}
+            className="inline-flex w-fit justify-center rounded-md bg-blue-900 py-2 px-3 text-sm font-semibold text-white shadow-sm"
+          >
+            Login
+          </Link>
+        </div>
       )}
     </div>
   );

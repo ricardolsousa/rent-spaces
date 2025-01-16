@@ -1,36 +1,17 @@
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { AuthenticationStateProps } from "../../../types/authentication/AuthenticationTypes";
-import { getFavoriteSpaces } from "../../../services/space/SpaceService";
 import SpaceCard from "../space-card/SpaceCard";
+import { useSpaces } from "../hooks/useSpaces";
 
 const SpaceFavoriteList = () => {
-  const loggedUserDetails = useSelector(
-    (state: AuthenticationStateProps) => state.auth.userDetails
+  const loggedUser = useSelector(
+    (state: AuthenticationStateProps) => state.auth.userId
   );
-  const [myFavoriteSpaces, setMyFavoriteSpaces] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const handleGetFavoriteSpaces = async () => {
-      setLoading(true);
-      try {
-        const spaces = await getFavoriteSpaces(
-          loggedUserDetails.favoriteSpaces || []
-        );
-
-        if (spaces.length) {
-          setMyFavoriteSpaces((prevSpaces) => [...prevSpaces, ...spaces]);
-        }
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    handleGetFavoriteSpaces();
-  }, [setMyFavoriteSpaces, loggedUserDetails]);
+  const { spaces, loading } = useSpaces({
+    userId: loggedUser,
+    pageType: "favorites",
+  });
 
   if (loading) {
     return <div>Loading...</div>;
@@ -38,9 +19,9 @@ const SpaceFavoriteList = () => {
 
   return (
     <>
-      {myFavoriteSpaces.length ? (
+      {spaces.length ? (
         <div className="grid grid-cols-4 gap-4">
-          {myFavoriteSpaces.map((space) => (
+          {spaces.map((space) => (
             <SpaceCard space={space} />
           ))}
         </div>

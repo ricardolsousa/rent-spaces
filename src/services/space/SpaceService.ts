@@ -24,7 +24,7 @@ export const getSpaces = async (userFavorites?: string[]) => {
     const spaces = spacesSnapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
-      isFavorite: userFavorites?.find((id: string) => id === doc.id),
+      isFavorite: userFavorites ? userFavorites.includes(doc.id) : false,
     }));
 
     return spaces;
@@ -62,7 +62,7 @@ export const createSpace = async (space: any) => {
 };
 
 // GET my spaces
-export const getMySpaces = async (userId: string) => {
+export const getMySpaces = async (userId: string, userFavorites: string[]) => {
   try {
     const spacesRef = collection(db, "spaces");
 
@@ -73,6 +73,7 @@ export const getMySpaces = async (userId: string) => {
     const spaces = spacesSnapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
+      isFavorite: userFavorites.includes(doc.id),
     }));
 
     return spaces;
@@ -85,6 +86,10 @@ export const getMySpaces = async (userId: string) => {
 // GET favorite spaces
 export const getFavoriteSpaces = async (userFavorites: string[]) => {
   try {
+    if (userFavorites.length === 0) {
+      return [];
+    }
+
     const spacesRef = collection(db, "spaces");
 
     const spacesQuery = query(
