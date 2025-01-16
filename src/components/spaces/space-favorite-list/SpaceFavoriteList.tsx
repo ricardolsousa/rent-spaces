@@ -16,7 +16,7 @@ const SpaceFavoriteList = () => {
       setLoading(true);
       try {
         const spaces = await getFavoriteSpaces(
-          loggedUserDetails.favoriteSpaces
+          loggedUserDetails.favoriteSpaces || []
         );
 
         if (spaces.length) {

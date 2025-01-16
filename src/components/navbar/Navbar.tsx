@@ -1,7 +1,7 @@
 import { signOut } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../firebase/firebase";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { logoutReducer } from "../../store/auth/authSlice";
 
 const Navbar = () => {
@@ -32,22 +32,38 @@ const Navbar = () => {
 
   return (
     <div className="h-16 flex fixed w-full z-10 items-center justify-between px-12 py-2 bg-gray-600">
-      <h1 className="text-3xl font-bold text-white">
-        Firebase Project Template
-      </h1>
+      <Link to={"/spaces"}>
+        <h1 className="text-3xl font-bold text-white">Rent Spaces</h1>
+      </Link>
       {isAuthenticated ? (
-        <button
-          type="button"
-          onClick={handleLogout}
-          className="inline-flex w-full justify-center rounded-md bg-blue-900 py-2 px-3 text-sm font-semibold text-white shadow-sm mr-3 sm:w-auto"
-        >
-          Logout
-        </button>
+        <div className="flex gap-10">
+          <div className="flex gap-2">
+            <Link
+              to={"/my-spaces"}
+              className="inline-flex w-fit justify-center rounded-md bg-blue-900 py-2 px-3 text-sm font-semibold text-white shadow-sm"
+            >
+              My spaces
+            </Link>
+            <Link
+              to={"/my-favorite-spaces"}
+              className="inline-flex w-fit justify-center rounded-md bg-blue-900 py-2 px-3 text-sm font-semibold text-white shadow-sm"
+            >
+              Favorites
+            </Link>
+          </div>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="inline-flex w-fit justify-center rounded-md bg-blue-900 py-2 px-3 text-sm font-semibold text-white shadow-sm"
+          >
+            Logout
+          </button>
+        </div>
       ) : (
         <button
           type="button"
           onClick={handleLogin}
-          className="inline-flex w-full justify-center rounded-md bg-blue-900 py-2 px-3 text-sm font-semibold text-white shadow-sm mr-3 sm:w-auto"
+          className="inline-flex w-fit justify-center rounded-md bg-blue-900 py-2 px-3 text-sm font-semibold text-white shadow-sm"
         >
           Login
         </button>

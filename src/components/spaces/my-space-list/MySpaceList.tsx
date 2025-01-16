@@ -6,7 +6,7 @@ import { getMySpaces } from "../../../services/space/SpaceService";
 
 const SpaceFavoriteList = () => {
   const loggedUser = useSelector(
-    (state: AuthenticationStateProps) => state.auth.userId
+    (state: AuthenticationStateProps) => state.auth
   );
   const [mySpaces, setMySpaces] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -15,10 +15,18 @@ const SpaceFavoriteList = () => {
     const handleGetMySpaces = async () => {
       setLoading(true);
       try {
-        const spaces = await getMySpaces(loggedUser);
+        const spaces = await getMySpaces(loggedUser.userId);
 
-        if (spaces.length) {
-          setMySpaces(spaces);
+        const mySpaces = spaces.map((space) =>
+          loggedUser.userDetails.favoriteSpaces.find(
+            (fav: string) => fav === space.id
+          )
+            ? { ...space, isFavorite: true }
+            : { ...space, isFavorite: false }
+        );
+
+        if (mySpaces.length) {
+          setMySpaces(mySpaces);
         }
       } catch (e) {
         console.error(e);
