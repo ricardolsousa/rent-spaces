@@ -11,6 +11,7 @@ import { getUserDetailsReducer } from "./store/auth/authSlice";
 import SpacesPage from "./pages/spaces/SpacesPage";
 import MyFavoriteSpacesPage from "./pages/my-favorite-spaces/MyFavoriteSpacesPage";
 import MySpacesPage from "./pages/my-spaces/MySpacesPage";
+import SpaceDetailsPage from "./pages/space-details/SpaceDetailsPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -61,6 +62,7 @@ function App() {
             )}
             {/* Route accessible to anyone */}
             <Route path="/spaces" element={<SpacesPage />} />
+            <Route path="/spaces/:spaceId" element={<SpaceDetailsPage />} />
           </Routes>
         </div>
       </Router>
