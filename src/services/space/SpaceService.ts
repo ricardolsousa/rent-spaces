@@ -34,6 +34,27 @@ export const getSpaces = async (userFavorites?: string[]) => {
   }
 };
 
+// GET space
+export const getSpace = async (spaceId: string) => {
+  try {
+    const spaceRef = doc(db, "spaces", spaceId);
+    const spaceSnapshot = await getDoc(spaceRef);
+
+    if (!spaceSnapshot.exists()) {
+      console.warn("Usuário não encontrado");
+      return [];
+    }
+
+    return {
+      ...spaceSnapshot.data(),
+      id: spaceSnapshot.id,
+    };
+  } catch (e) {
+    console.error(e);
+    throw new Error("Error trying to get space");
+  }
+};
+
 // CREATE space
 export const createSpace = async (space: any) => {
   try {
