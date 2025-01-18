@@ -20,7 +20,7 @@ const SpaceCard = ({ space }: SpaceCardProps) => {
       />
       <Link to={`/spaces/${space.id}`}>
         <img
-          src="images/spaces.webp"
+          src="/images/spaces.webp"
           alt=""
           className="w-full object-cover"
           style={{ height: "200px" }}
