@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { getSpace } from "../../services/space/SpaceService";
+import { createReservation } from "../../services/reservation/ReservationService";
+import { useSelector } from "react-redux";
+import { AuthenticationStateProps } from "../../types/authentication/AuthenticationTypes";
 
 const SpaceDetailsPage = () => {
   const { spaceId } = useParams();
+  const loggedUser = useSelector(
+    (state: AuthenticationStateProps) => state.auth.userId
+  );
   const [space, setSpace] = useState<any>(null);
   const [reservation, setReservation] = useState<any>(null);
 
@@ -26,7 +32,42 @@ const SpaceDetailsPage = () => {
     fetchSpace();
   }, [spaceId]);
 
-  const handleReservation = () => {
+  const calculateDifference = (start: any, end: any) => {
+    if (start && end) {
+      const startDateObj = new Date(start);
+      const endDateObj = new Date(end);
+
+      const diffInTime = endDateObj.getTime() - startDateObj.getTime();
+      const diffInDays = diffInTime / (1000 * 3600 * 24); // Converter milissegundos para dias
+
+      return diffInDays > 0 ? diffInDays : 0; // Garante que não seja negativo
+    } else {
+      return null; // Reseta se as datas forem inválidas
+    }
+  };
+
+  const handleReservation = async () => {
+    try {
+      // spaceId
+      // renterId
+      // startDate
+      // endDate
+      // totalPrice
+      // status
+      const days =
+        calculateDifference(reservation.startDate, reservation.endDate) || 1;
+
+      const newReservation = await createReservation({
+        spaceId: spaceId,
+        renterId: loggedUser,
+        startDate: reservation.startDate,
+        endDate: reservation.endDate,
+        totalPrice: days * space.pricePerHour,
+        status: "confirmed",
+      });
+    } catch (e) {
+      console.error(e);
+    }
     console.log("book now");
   };
 
@@ -128,7 +169,6 @@ const SpaceDetailsPage = () => {
               </div>
             </div>
           </div>
-          <div>{JSON.stringify(space, null, 2)}</div>
           <div className="flex flex-row gap-4 items-end">
             <div className="flex flex-col">
               <label htmlFor="startDate">Start date</label>
