@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { AuthenticationStateProps } from "../../../types/authentication/AuthenticationTypes";
 import { createReservation } from "../../../services/reservation/ReservationService";
 import { calculateDaysBetweenDates } from "../../../utils/date/dateUtils";
+import SpaceReservationDates from "./space-reservation-dates/SpaceReservationDates";
 
 type SpaceReservationProps = {
   space: any;
@@ -12,8 +13,10 @@ const SpaceReservation = ({ space }: SpaceReservationProps) => {
   const loggedUser = useSelector(
     (state: AuthenticationStateProps) => state.auth.userId
   );
-  const [startDate, setStartDate] = useState<string>();
-  const [endDate, setEndDate] = useState<string>();
+  const [reservationDates, setReservationDates] = useState<any>({
+    startDate: "",
+    endDate: "",
+  });
 
   const handleReservation = async () => {
     try {
@@ -23,13 +26,17 @@ const SpaceReservation = ({ space }: SpaceReservationProps) => {
       // endDate
       // totalPrice
       // status
-      const days = calculateDaysBetweenDates(startDate, endDate) || 1;
+      const days =
+        calculateDaysBetweenDates(
+          reservationDates.startDate,
+          reservationDates.endDate
+        ) || 1;
 
       const newReservation = await createReservation({
         spaceId: space.id,
         renterId: loggedUser,
-        startDate: startDate,
-        endDate: endDate,
+        startDate: reservationDates.startDate,
+        endDate: reservationDates.endDate,
         totalPrice: days * space.pricePerHour,
         status: "confirmed",
       });
@@ -41,30 +48,13 @@ const SpaceReservation = ({ space }: SpaceReservationProps) => {
 
   return (
     <div className="flex flex-row gap-4 items-end">
-      <div className="flex flex-col">
-        <label htmlFor="startDate">Start date</label>
-        <input
-          className="rounded border border-gray-300 px-2 py-1"
-          type="date"
-          name="startDate"
-          id="startDate"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-      </div>
-      <div className="flex flex-col">
-        <label htmlFor="endDate">End date</label>
-        <input
-          className="rounded border border-gray-300 px-2 py-1"
-          type="date"
-          name="endDate"
-          id="endDate"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
-      </div>
+      <SpaceReservationDates
+        reservationDates={reservationDates}
+        setReservationDates={setReservationDates}
+      />
       <button
         type="button"
+        disabled={!reservationDates.startDate || !reservationDates.endDate}
         onClick={handleReservation}
         className="inline-flex w-content justify-center rounded-md bg-blue-900 py-2 px-3 text-sm font-semibold text-white shadow-sm"
       >
