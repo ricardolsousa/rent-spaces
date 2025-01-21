@@ -35,8 +35,8 @@ const SpaceReservation = ({ space }: SpaceReservationProps) => {
       const newReservation = await createReservation({
         spaceId: space.id,
         renterId: loggedUser,
-        startDate: reservationDates.startDate,
-        endDate: reservationDates.endDate,
+        startDate: new Date(reservationDates.startDate),
+        endDate: new Date(reservationDates.endDate),
         totalPrice: days * space.pricePerHour,
         status: "confirmed",
       });
